@@ -5,14 +5,13 @@ import "react-datetime/css/react-datetime.css";
 import FormContainer from "../components/FormContainer";
 import Reminders from "../components/Reminders";
 import { useDispatch } from "react-redux";
-import { getReminders } from "../actions/reminders";
+import { getReminders, createReminder } from "../actions/reminders";
 
 const HomeScreen = () => {
   const [reminderData, setReminderData] = useState({
     title: "",
     message: "",
     endDate: "",
-    endTime: "",
     receivers: "",
     level: "",
   });
@@ -23,7 +22,23 @@ const HomeScreen = () => {
     dispatch(getReminders());
   }, [dispatch]);
 
-  const handleSubmit = () => {};
+  const clear = () => {
+    setReminderData({
+      title: "",
+      message: "",
+      endDate: "",
+      receivers: "",
+      level: "",
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(reminderData);
+    dispatch(createReminder(reminderData));
+    clear();
+  };
+
   const handleLevelChange = (e) => {
     setReminderData({ ...reminderData, level: e.target.value });
     console.log(reminderData.level);
@@ -36,7 +51,7 @@ const HomeScreen = () => {
         </Col>
         <Col>
           <FormContainer>
-            <h1>Set Reminder</h1>
+            <h1 className="align-self-center">Set Reminder</h1>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="my-2" controlId="title">
                 <Form.Label>Title</Form.Label>
@@ -65,36 +80,12 @@ const HomeScreen = () => {
                 />
               </Form.Group>
               <Form.Group className="my-2" controlId="endDate">
-                <Row>
-                  <Col>
-                    <Form.Label>Date</Form.Label>
-                    <Datetime
-                      dateFormat="YYYY-MM-DD"
-                      timeFormat={false}
-                      value={reminderData.endDate}
-                      onChange={(e) =>
-                        setReminderData({
-                          ...reminderData,
-                          endDate: e.target.value,
-                        })
-                      }
-                    />
-                  </Col>
-                  <Col>
-                    <Form.Label>Time</Form.Label>
-                    <Datetime
-                      dateFormat={false}
-                      timeFormat="HH:mm A"
-                      value={reminderData.endTime}
-                      onChange={(e) =>
-                        setReminderData({
-                          ...reminderData,
-                          endTime: e.target.value,
-                        })
-                      }
-                    />
-                  </Col>
-                </Row>
+                <Form.Label>Date</Form.Label>
+                <Datetime
+                  dateFormat="YYYY-MM-DD"
+                  timeFormat={false}
+                  closeOnSelect={true}
+                />
               </Form.Group>
               <Form.Group className="my-2" controlId="endDate">
                 <Form.Label>Receiver(s)</Form.Label>
@@ -145,7 +136,11 @@ const HomeScreen = () => {
               </Form.Group>
               <Row className="">
                 <Col>
-                  <Button variant="danger" className="mt-3 w-100">
+                  <Button
+                    variant="danger"
+                    className="mt-3 w-100"
+                    onClick={clear}
+                  >
                     Reset
                   </Button>
                 </Col>

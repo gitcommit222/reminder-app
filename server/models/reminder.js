@@ -11,7 +11,7 @@ const reminderSchema = mongoose.Schema(
       required: true,
     },
     level: {
-      type: Number,
+      type: String,
       required: true,
     },
     startDate: {
@@ -20,7 +20,6 @@ const reminderSchema = mongoose.Schema(
     },
     endDate: {
       type: Date,
-      required: true,
     },
     receivedBy: {
       type: [String],

@@ -5,7 +5,6 @@ const getReminders = asyncHandler(async (req, res) => {
   try {
     const reminders = await Reminder.find();
     res.status(200).json(reminders);
-    console.log(reminders);
   } catch (error) {
     res.status(400);
     throw new Error("No reminders");
